@@ -1,0 +1,71 @@
+:root {
+  --bg: #0b0c0e; --card: #14161a; --btn: #1b1e23; --text: #f4f5f6; --muted: #9aa0a6; --off: #2a2d33;
+  --accent: #f4f5f6; --glow: transparent;
+  font-family: Inter, -apple-system, system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; background: var(--bg); color: var(--text); }
+body { overscroll-behavior: none; -webkit-user-select: none; user-select: none; }
+
+.app { height: 100%; display: flex; gap: 20px; padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); }
+.app[data-level='caution'] { --accent: #f5a524; --glow: rgba(245, 165, 36, 0.45); }
+.app[data-level='danger'] { --accent: #ff4d4f; --glow: rgba(255, 77, 79, 0.55); }
+
+.camera { flex: 1; min-width: 0; position: relative; display: grid; place-items: center; border-radius: 24px; overflow: hidden; background: linear-gradient(#1a1e23, #0e1013); }
+.frame { position: relative; width: 100%; max-height: 100%; }
+.frame video { width: 100%; height: 100%; display: block; object-fit: fill; }
+.box { position: absolute; border: 2px solid rgba(244, 245, 246, 0.6); border-radius: 8px; }
+.box.in-path { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.box span { position: absolute; left: -2px; bottom: 100%; margin-bottom: 6px; padding: 4px 10px; border-radius: 8px; background: var(--accent); color: #14161a; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.chip { position: absolute; top: 20px; left: 20px; display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: rgba(11, 12, 14, 0.7); font-size: 13px; color: #c9cdd2; }
+.chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--off); }
+.chip i.live { background: #3dd68c; }
+.start { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 16px; background: rgba(11, 12, 14, 0.6); }
+.start button { min-width: 200px; height: 64px; border: 0; border-radius: 18px; background: var(--text); color: var(--bg); font: 600 18px Inter, system-ui, sans-serif; }
+.start button:disabled { opacity: 0.5; }
+.start p { margin: 0; max-width: 320px; text-align: center; color: #ff8a8c; font-size: 14px; }
+
+.panel { width: 340px; display: flex; flex-direction: column; gap: 16px; }
+.card { margin: 0; padding: 24px 28px; border-radius: 24px; background: var(--card); }
+.status { padding: 28px; }
+.status h2 { margin: 0; font-size: 13px; font-weight: 500; color: var(--muted); }
+.word { margin: 12px 0 0; font-size: 48px; font-weight: 300; line-height: 1.1; color: var(--accent); }
+.muted { margin: 8px 0 0; font-size: 15px; color: var(--muted); }
+.bars { display: flex; gap: 6px; margin-top: 24px; }
+.bars span { flex: 1; height: 6px; border-radius: 3px; background: var(--off); }
+.bars .lit-1 { background: #f4f5f6; }
+.bars .lit-2 { background: #f5a524; }
+.bars .lit-3 { background: #ff4d4f; }
+.rows { display: flex; flex-direction: column; gap: 16px; font-size: 15px; }
+.rows div { display: flex; justify-content: space-between; }
+.rows dt { color: var(--muted); }
+.rows dd { margin: 0; font-weight: 500; }
+.spacer { flex: 1; }
+.actions button { width: 100%; height: 56px; border: 0; border-radius: 16px; background: var(--btn); color: var(--text); font: 500 15px Inter, system-ui, sans-serif; }
+
+.glow { position: fixed; inset: 0; pointer-events: none; opacity: 0; box-shadow: inset 0 0 90px 8px var(--glow); transition: opacity 0.3s; }
+.app:not([data-level='clear']) .glow { opacity: 1; }
+.app[data-level='danger'] .glow { animation: pulse 0.9s ease-in-out infinite alternate; }
+@keyframes pulse { from { opacity: 0.55; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .app[data-level='danger'] .glow { animation: none; } }
+button:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+/* Phones in landscape (iPhone 11 is 896 x 414): slim status strip, trimmed cards */
+@media (max-height: 480px) {
+  .app { gap: 12px; padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: max(16px, env(safe-area-inset-bottom)); padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .camera { border-radius: 18px; }
+  .chip { top: 12px; left: 12px; padding: 6px 12px; font-size: 12px; }
+  .panel { width: 188px; gap: 10px; }
+  .card { padding: 14px 16px; border-radius: 18px; }
+  .status { padding: 16px; }
+  .status h2 { font-size: 12px; }
+  .word { font-size: 26px; margin-top: 6px; line-height: 1.15; }
+  .muted { font-size: 13px; margin-top: 6px; line-height: 1.3; }
+  .bars { margin-top: 14px; gap: 5px; }
+  .bars span { height: 5px; }
+  .rows { gap: 10px; font-size: 14px; }
+  .rows.sys, .rows .extra { display: none; }
+  .actions button { height: 48px; border-radius: 14px; font-size: 14px; }
+  .box span { font-size: 12px; padding: 3px 8px; }
+  .glow { box-shadow: inset 0 0 60px 6px var(--glow); }
+}
